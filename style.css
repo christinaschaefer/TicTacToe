@@ -15,3 +15,10 @@
     grid-gap: 5px;
 }
 
+.spieler1{
+    background-color: red;
+}
+
+.spieler2{
+    background-color: green;
+}
