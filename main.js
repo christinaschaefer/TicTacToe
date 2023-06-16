@@ -1,6 +1,5 @@
 //ToDo style den button klick 
-// ToDo Punktestand angeben 
-//ToDo Name ermittel
+// To Do Neustart Button 
 
 var spieler = {
   spieler_1: {
@@ -129,8 +128,6 @@ function neuesSpiel(spieler1, spieler2) {
     }
     spielrundeAnzeigen(spielrunde, spieler1, spieler2);
   }
- 
-
 }
 
 function zurucksetzen(spieler1, spieler2) {
@@ -141,7 +138,6 @@ function zurucksetzen(spieler1, spieler2) {
     spieler2.gewonnen = false;
   }
 }
-
 
 // Anzeige der Spielrunden und Spielstand in Html 
 function spielrundeAnzeigen(spielrunde, spieler1, spieler2) {
@@ -170,22 +166,23 @@ function spielrundeAnzeigen(spielrunde, spieler1, spieler2) {
     newCellSpieler2.appendChild(spielstandSpieler2);
   }
 }
-
-
-
-
-
-
-function addSpielname() {
+//Input einfügen von den Namen 
+function addSpielname(spieler1, spieler2) {
   document.addEventListener("DOMContentLoaded", function () {
-    var spieler1 = document.getElementById("spieler1");
-    spieler1.addEventListener("input", function () {
-      console.log(spieler1.value);
+    var inputSpieler1 = document.getElementById("spieler1");
+    var inputSpieler2 = document.getElementById("spieler2");
+    inputSpieler1.addEventListener("input", function () {
+    nameSpieler1= inputSpieler1.value
+    spieler1.name = nameSpieler1
+    inputSpieler2.addEventListener("input", function () {
+    nameSpieler2= inputSpieler2.value
+    spieler2.name = nameSpieler2
     });
   });
+});
 }
 
 bord();
-addSpielname();
+addSpielname(spieler.spieler_1, spieler.spieler_2);
 winArray(spieler.spieler_1, spieler.spieler_2);
 
