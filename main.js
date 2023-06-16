@@ -1,5 +1,4 @@
 //ToDo style den button klick 
-// To Do Neustart Button 
 
 var spieler = {
   spieler_1: {
@@ -180,6 +179,10 @@ function addSpielname(spieler1, spieler2) {
     });
   });
 });
+}
+
+function neuStart() {
+  location.reload();
 }
 
 bord();
