@@ -1,59 +1,55 @@
-
+//ToDo style den button klick 
 // ToDo Punktestand angeben 
 //ToDo Name ermittel
 
 var spieler = {
   spieler_1: {
-    name: "1",
+    name: "Spieler 1",
     turn: true,
     winArray: [],
-    gewonnen: false
+    gewonnen: false,
+    spielpunkte: 0
   },
   spieler_2: {
-    name: "2",
+    name: "Spieler 2",
     turn: false,
     winArray: [],
-    gewonnen: false
+    gewonnen: false,
+    spielpunkte: 0
   }
-}
+};
 
-var spielrunde=0;
+let spielrunde = 0;
+
+// Gewinnmöglichkeiten
 const winnerOption = [
-  //waagerecht
+  // Waagerecht
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
-  //senkrecht
+  // Senkrecht
   [0, 3, 6],
   [1, 4, 7],
   [2, 5, 8],
-  //diagonal 
+  // Diagonal
   [0, 4, 8],
-  [2, 4, 6],
+  [2, 4, 6]
 ];
 
-
-// ToDo Funktionen in eine funtktion reinschmeischen 
-bord();
-addSpielname();
-winArray(spieler.spieler_1, spieler.spieler_2)
-
-
-
-// Erstellt das Bord 
+// Erstellt das Spielbrett
 function bord() {
-  var bordContainer = document.getElementById("playerBord")
+  var bordContainer = document.getElementById("playerBord");
 
   for (let i = 0; i < 9; i++) {
-    var playerButton = document.createElement("button")
-    playerButton.innerHTML = i + 1
-    playerButton.id = i
-    playerButton.className = "gameFieldButton"
-    bordContainer.appendChild(playerButton)
-
+    var playerButton = document.createElement("button");
+    playerButton.innerHTML = i + 1;
+    playerButton.id = i;
+    playerButton.className = "gameFieldButton";
+    bordContainer.appendChild(playerButton);
   }
 }
-// Erstellt ein Array mit den klicks und ändert die Klasse, um die Frabe dann oder das Aussehen zu ändern 
+
+// Fügt die Klick-Handler und das Ändern der Klassen hinzu
 function winArray(spieler1, spieler2) {
   var buttons = document.getElementsByTagName("button");
 
@@ -73,78 +69,113 @@ function winArray(spieler1, spieler2) {
         spieler1.turn = false;
         spieler2.turn = true;
 
-        // ändert den Classennamen der aktuellen klasse 
         event.target.classList.add("spieler1");
         setTimeout(() => {
           checkWin(spieler1);
-          neuesSpiel(spieler1,spieler2);
+          neuesSpiel(spieler1, spieler2);
         }, 100);
       } else if (spieler2.turn == true && spieler1.turn == false) {
         spieler2.winArray.push(id);
         console.log(spieler2);
         spieler2.turn = false;
         spieler1.turn = true;
-        // ändert den Classennamen der aktuellen klasse 
+
         event.target.classList.add("spieler2");
         setTimeout(() => {
-          checkWin(spieler2)
-          neuesSpiel(spieler1,spieler2)
+          checkWin(spieler2);
+          neuesSpiel(spieler1, spieler2);
         }, 100);
       }
     } else {
-      alert("Dieser Button wurde schon mal ausgewählt. Bitte such dir ein anderen Button aus!");
+      alert("Dieser Button wurde bereits ausgewählt. Bitte wähle einen anderen Button aus!");
     }
   }
 }
 
 function checkWin(spieler) {
-  const win = spieler.winArray.map(Number); // Konvertiere die Elemente des Arrays in numerische Werte
+  const win = spieler.winArray.map(Number);
 
-  // prüft ob 3 eingeben gemacht wurden, erst dann vergelicht er die Arrays 
   if (win.length >= 3) {
-    // iteration über winnerOption 
     for (const option of winnerOption) {
       const [a, b, c] = option;
       if (win.includes(a) && win.includes(b) && win.includes(c)) {
         console.log(`${spieler.name} hat gewonnen!`);
         spieler.gewonnen = true;
-        spielrunde +=1
+        spielrunde += 1;
         console.log(spielrunde);
+        spieler.spielpunkte += 1;
         break;
       }
     }
   }
 }
 
-// fragt ob ein neues spiel gemacht werden soll 
-function neuesSpiel(spieler1,spieler2) {
+function neuesSpiel(spieler1, spieler2) {
   const buttons = document.querySelectorAll("button");
+
   if (spieler1.gewonnen === true || spieler2.gewonnen === true) {
-    const frage = confirm("Soll die Runde weiter geführt werden?")
+    const frage = confirm("Soll die Runde weitergeführt werden?");
     if (frage === true) {
       buttons.forEach(button => {
         button.removeAttribute("data-clicked");
-        button.classList.remove("spieler1", "spieler2")
-        zurucksetzen(spieler1,spieler2)
-      })
+        button.classList.remove("spieler1", "spieler2");
+      });
+      zurucksetzen(spieler1, spieler2);
     } else {
-      location.reload();
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+      return; // Hinzugefügter Rückgabewert, um den Code abzubrechen
     }
+    spielrundeAnzeigen(spielrunde, spieler1, spieler2);
+  }
+ 
+
+}
+
+function zurucksetzen(spieler1, spieler2) {
+  if (spieler1.gewonnen != false || spieler2.gewonnen != false) {
+    spieler1.winArray = [];
+    spieler2.winArray = [];
+    spieler1.gewonnen = false;
+    spieler2.gewonnen = false;
   }
 }
 
-// setzt alle Daten zurück 
-function zurucksetzen(spieler1,spieler2){
-if (spieler1.gewonnen != false || spieler2.gewonnen != false){
-  spieler1.winArray =[];
-  spieler2.winArray = [];
-  spieler1.gewonnen = false;
-  spieler2.gewonnen = false;
-}
+
+// Anzeige der Spielrunden und Spielstand in Html 
+function spielrundeAnzeigen(spielrunde, spieler1, spieler2) {
+  let tabele = document.getElementById("spielstandInfo");
+  let zeilenAnzahl = tabele.rows.length;
+
+  if (zeilenAnzahl > 0) {
+    // Es sind bereits Zeilen vorhanden, aktualisieren Sie die Zelleninhalte
+    let letzteZeile = tabele.rows[zeilenAnzahl - 1];
+    letzteZeile.cells[0].textContent = `Spielrunde: ${spielrunde}`;
+    letzteZeile.cells[1].textContent = `${spieler1.name}: ${spieler1.spielpunkte}`;
+    letzteZeile.cells[2].textContent = `${spieler2.name}: ${spieler2.spielpunkte}`;
+  } else {
+    // Es sind keine Zeilen vorhanden, fügen Sie neue Zeilen hinzu
+    let newRow = tabele.insertRow(-1);
+    let newCellSpielrunde = newRow.insertCell(0);
+    let spielrundeText = document.createTextNode(`Spielrunde: ${spielrunde}`);
+    newCellSpielrunde.appendChild(spielrundeText);
+
+    let newCellSpieler1 = newRow.insertCell(1);
+    let spielstandSpieler1 = document.createTextNode(`${spieler1.name}: ${spieler1.spielpunkte}`);
+    newCellSpieler1.appendChild(spielstandSpieler1);
+
+    let newCellSpieler2 = newRow.insertCell(2);
+    let spielstandSpieler2 = document.createTextNode(`${spieler2.name}: ${spieler2.spielpunkte}`);
+    newCellSpieler2.appendChild(spielstandSpieler2);
+  }
 }
 
-console.log(spieler1);
-// Liest den Spielernamen aus 
+
+
+
+
+
 function addSpielname() {
   document.addEventListener("DOMContentLoaded", function () {
     var spieler1 = document.getElementById("spieler1");
@@ -153,4 +184,8 @@ function addSpielname() {
     });
   });
 }
+
+bord();
+addSpielname();
+winArray(spieler.spieler_1, spieler.spieler_2);
 
