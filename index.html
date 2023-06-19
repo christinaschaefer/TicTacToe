@@ -8,18 +8,22 @@
     <title>TicTacToe</title>
 </head>
 <body>
+    <div>
         <h1>Tic Tac Toe</h1>
-   
+    </div>
     <div class="infofeld">
     <label > Spielername 1 : </label> <input type="text" id="spieler1"> 
     <label> Spielername 2 : </label> <input id="spieler2"> 
+    </div>
+    <div id="indoWin">
+
     </div>
     <div class="bord" id="playerBord">
     </div>
 <table id="spielstandInfo">
 </table>
 <div>
-    <button id="neuStart" onclick="neuStart()" > Spiel neu Starten </button>
+    <button class="neuStart" id="neuStartid" onclick="neuStart()" > Spiel neu Starten </button>
 </div>
     <script src="main.js"></script>
 </body>

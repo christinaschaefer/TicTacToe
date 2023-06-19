@@ -1,24 +1,45 @@
-
-.gameFieldButton {
-    color: red;
-
-}
-
-.bord{
-
-    margin: 20px 0px 20px;
+.bord {
+    margin: 20px 0;
     width: 70vh;
     max-width: 100%;
-    height: 50vh;
+    height: 60vh;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 5px;
-}
-
-.spieler1{
-    background-color: red;
-}
-
-.spieler2{
-    background-color: green;
-}
+    font-size: 0; /* Setze die Schriftgröße auf 0, um den Platz für die Buttons zu maximieren */
+  }
+  
+  .gameFieldButton,
+  .spieler1::after,
+  .spieler2::after,
+  .gewonnen {
+    font-size: 70px; /* Hier die gewünschte Schriftgröße einstellen */
+    text-align: start;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    position: relative;
+    background-color: transparent;
+  }
+  
+  .spieler1::after {
+    content: "X";
+  }
+  
+  .spieler2::after {
+    content: "O";
+  }
+  
+  .gewonnen {
+    color: red;
+  }
+  
+  #neuStart{
+    height: 40px;
+    font-size: 20px;
+  }
+  
