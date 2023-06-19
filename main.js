@@ -6,6 +6,7 @@ var spieler = {
     turn: true,
     winArray: [],
     gewonnen: false,
+    unentschieden: false,
     spielpunkte: 0
   },
   spieler_2: {
@@ -13,6 +14,7 @@ var spieler = {
     turn: false,
     winArray: [],
     gewonnen: false,
+    unentschieden:false,
     spielpunkte: 0
   }
 };
@@ -51,14 +53,17 @@ function bord() {
 function winArray(spieler1, spieler2) {
   var buttons = document.getElementsByTagName("button");
 
+
   for (var i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener("click", handleClick);
   }
 
   function handleClick(event) {
+   
     if (!event.target.hasAttribute("data-clicked")) {
       event.target.setAttribute("data-clicked", "true");
-
+      unentschieden(spieler1,spieler2)
+    
       var id = event.target.id;
 
       if (spieler1.turn == true && spieler2.turn == false) {
@@ -74,7 +79,6 @@ function winArray(spieler1, spieler2) {
         }, 100);
       } else if (spieler2.turn == true && spieler1.turn == false) {
         spieler2.winArray.push(id);
-        console.log(spieler2);
         spieler2.turn = false;
         spieler1.turn = true;
 
@@ -83,7 +87,7 @@ function winArray(spieler1, spieler2) {
           checkWin(spieler2);
           neuesSpiel(spieler1, spieler2);
         }, 100);
-      }
+      }  
     } else {
       alert("Dieser Button wurde bereits ausgewählt. Bitte wähle einen anderen Button aus!");
     }
@@ -99,8 +103,7 @@ function checkWin(spieler) {
       if (win.includes(a) && win.includes(b) && win.includes(c)) {
         console.log(`${spieler.name} hat gewonnen!`);
         spieler.gewonnen = true;
-        spielrunde += 1;
-        console.log(spielrunde);
+       
         spieler.spielpunkte += 1;
         break;
       }
@@ -111,30 +114,54 @@ function checkWin(spieler) {
 function neuesSpiel(spieler1, spieler2) {
   const buttons = document.querySelectorAll("button");
 
-  if (spieler1.gewonnen === true || spieler2.gewonnen === true) {
+  if (spieler1.gewonnen === true || spieler2.gewonnen === true|| spieler1.unentschieden==true && spieler2.unentschieden == true) {
     const frage = confirm("Soll die Runde weitergeführt werden?");
     if (frage === true) {
+      spielrunde += 1;
+      console.log(spielrunde);
       buttons.forEach(button => {
         button.removeAttribute("data-clicked");
-        button.classList.remove("spieler1", "spieler2");
+        button.classList.remove("spieler1", "spieler2"); // To Do
+
       });
-      zurucksetzen(spieler1, spieler2);
+      
+        zurucksetzen(spieler1, spieler2); 
     } else {
       setTimeout(() => {
         location.reload();
       }, 500);
       return; // Hinzugefügter Rückgabewert, um den Code abzubrechen
     }
+  
     spielrundeAnzeigen(spielrunde, spieler1, spieler2);
   }
 }
 
+
 function zurucksetzen(spieler1, spieler2) {
-  if (spieler1.gewonnen != false || spieler2.gewonnen != false) {
+  if (spieler1.gewonnen != false || spieler2.gewonnen != false|| spieler1.unentschieden!=false&spieler2!=false) {
     spieler1.winArray = [];
     spieler2.winArray = [];
     spieler1.gewonnen = false;
     spieler2.gewonnen = false;
+    spieler1.unentschieden = false; 
+    spieler2.unentschieden = false;
+  }
+}
+
+function unentschieden(spieler1,spieler2){
+  var buttons = document.getElementsByClassName("gameFieldButton");
+  var allClicked = true;
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].getAttribute("data-clicked") !== "true") {
+      allClicked = false;
+      break;
+    }
+  }
+  if (allClicked) {
+    spieler1.unentschieden = true 
+    spieler2.unentschieden = true 
   }
 }
 
