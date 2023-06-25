@@ -132,7 +132,7 @@ function neuesSpiel(spieler1, spieler2) {
     }
 
     setTimeout(() => {
-      const frage = confirm("Soll die Runde weitergeführt werden?");
+      const frage = confirm("Soll die Runde weitergeführt werden? wenn ja drücke auf Okay, wenn nein dann auf Abbreichen!");
 
       if (frage === true) {
         spielrunde += 1;
